@@ -9,9 +9,13 @@
         <img src="{{ movie.image }}" height="400" width="600">
     </div>
     <div class="mt-4">
-        <a href="{{ path("movies_update", {movie: movie.id}) }}" class="h4 btn btn-outline-dark">Update</a>
-        <a href="{{ path("movies_delete", {movie: movie.id}) }}" class="h4 btn btn-outline-danger">Delete</a>
-        <br>
+        {% if app.user %}
+            {% if app.user.isAdmin() %}
+                <a href="{{ path("movies_update", {movie: movie.id}) }}" class="h4 btn btn-outline-dark">Update</a>
+                <a href="{{ path("movies_delete", {movie: movie.id}) }}" class="h4 btn btn-outline-danger">Delete</a>
+                <br>
+            {% endif %}
+        {% endif %}
         <span class="text-muted">Rating: {{ movie.rating }}</span>
     </div>
     <div class="mt-2">

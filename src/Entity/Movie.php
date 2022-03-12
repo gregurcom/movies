@@ -8,6 +8,7 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 class Movie
@@ -18,18 +19,35 @@ class Movie
     private $id;
 
     #[ORM\Column(type: 'string', length: 150)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 5, max: 150)]
     private $title;
 
     #[ORM\Column(type: 'float', nullable: true)]
     private $rating;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Image([
+        'maxSize' => "10M",
+        'minWidth' => 200,
+        'maxWidth' => 5000,
+        'minHeight' => 200,
+        'maxHeight' => 5000,
+        'mimeTypes' => [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/gif",
+        ]
+    ])]
     private $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
     private $actors;
 
     #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
     private $description;
 
     public function __construct()

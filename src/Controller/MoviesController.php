@@ -18,7 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MoviesController extends AbstractController
 {
-    public function __construct(private MovieRepository $movieRepository, private EntityManagerInterface $em) {}
+    public function __construct(
+        private MovieRepository $movieRepository,
+        private EntityManagerInterface $em,
+    ) {}
 
     #[Route('/movies', name: 'movies_list', methods: ['GET'])]
     public function list(): Response
