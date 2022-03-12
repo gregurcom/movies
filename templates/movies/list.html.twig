@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Movies - list{% endblock %}
+
+{% block body %}
+<div class="container mt-2">
+    <h1 class="text-center mb-3">Movies</h1>
+    {% if app.user.isAdmin() %}
+        <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">Create movie</a>
+    {% endif %}
+    {% for movie in movies %}
+        <div class="row mb-3">
+            <div class="col-6">
+                <a href="{{ path("movies_show", {movie: movie.id}) }}" class="h3 text-decoration-none text-dark">{{ movie.title }}</a>
+                <span class="text-muted">Rating: {{ movie.rating }}</span>
+                <div>
+                    {{ movie.description }}
+                </div>
+            </div>
+            <div class="col-6">
+                <img src="{{ movie.image }}" height="180" width="320">
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

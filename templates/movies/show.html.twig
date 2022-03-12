@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1 class="text-center">{{ movie.title }}</h1>
+    <div class="text-center">
+        <img src="{{ movie.image }}" height="400" width="600">
+    </div>
+    <div class="mt-4">
+        <a href="{{ path("movies_update", {movie: movie.id}) }}" class="h4 btn btn-outline-dark">Update</a>
+        <a href="{{ path("movies_delete", {movie: movie.id}) }}" class="h4 btn btn-outline-danger">Delete</a>
+        <br>
+        <span class="text-muted">Rating: {{ movie.rating }}</span>
+    </div>
+    <div class="mt-2">
+        {{ movie.description }}
+    </div>
+</div>
+{% endblock %}
