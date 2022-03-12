@@ -5,9 +5,12 @@
 {% block body %}
 <div class="container mt-2">
     <h1 class="text-center mb-3">Movies</h1>
-    {% if app.user.isAdmin() %}
-        <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">Create movie</a>
+    {% if app.user %}
+        {% if app.user.isAdmin() %}
+            <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">Create movie</a>
+        {% endif %}
     {% endif %}
+
     {% for movie in movies %}
         <div class="row mb-3">
             <div class="col-6">
