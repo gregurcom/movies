@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app.user.name }} - profile{% endblock %}
+
+{% block body %}
+<div class="container mt-2">
+    <h3>{{ app.user.name }}</h3>
+    {{ app.user.email }}
+</div>
+{% endblock %}
