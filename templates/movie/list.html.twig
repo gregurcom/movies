@@ -14,7 +14,7 @@
     {% for movie in movies %}
         <div class="row mb-3 align-items-center">
             <div class="col-6">
-                <a href="{{ path("movies_show", {movie: movie.id}) }}" class="h3 text-decoration-none text-dark">{{ movie.title }}</a>
+                <a href="{{ path("movies_show", {id: movie.id}) }}" class="h3 text-decoration-none text-dark">{{ movie.title }}</a>
                 <span class="text-muted">Rating: {{ movie.rating }}</span>
                 <div>
                     {{ movie.description }}

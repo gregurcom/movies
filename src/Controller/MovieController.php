@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
+use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -29,7 +30,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies/create', name: 'movies_create')]
-    public function create(Request $request): Response
+    public function create(Request $request, MovieService $movieService): Response
     {
         $movie = new Movie();
         $form = $this->createForm(MovieFormType::class, $movie);
@@ -37,14 +38,13 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newMovie = $form->getData();
             $imagePath = $form->get('image')->getData();
 
             if ($imagePath) {
-                $this->storeImage($newMovie, $imagePath);
+                $movieService->storeImage($movie, $imagePath);
             }
 
-            $this->em->persist($newMovie);
+            $this->em->persist($movie);
             $this->em->flush();
 
             return $this->redirectToRoute('movies_list');
@@ -53,11 +53,9 @@ class MovieController extends AbstractController
         return $this->renderForm('movie/create.html.twig', ['form' => $form]);
     }
 
-    #[Route('/movies/{movie}/update', name: 'movies_update', requirements: ['movie' => '\d+'])]
-    public function update(int $movie, Request $request): Response
+    #[Route('/movies/{id}/update', name: 'movies_update', requirements: ['id' => '\d+'])]
+    public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
-        $movie = $this->movieRepository->find($movie);
-
         $form = $this->createForm(MovieFormType::class, $movie);
 
         $form->handleRequest($request);
@@ -65,11 +63,8 @@ class MovieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($imagePath) {
-                $this->storeImage($movie, $imagePath);
+                $movieService->storeImage($movie, $imagePath);
             }
-            $movie->setTitle($form->get('title')->getData());
-            $movie->setRating($form->get('rating')->getData());
-            $movie->setDescription($form->get('description')->getData());
 
             $this->em->flush();
 
@@ -82,39 +77,18 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/movies/{movie}/delete', name: 'movies_delete', methods: ['GET', 'DELETE'])]
-    public function delete(int $movie): Response
+    #[Route('/movies/{id}/delete', name: 'movies_delete', requirements: ['id' => '\d+'], methods: ['GET', 'DELETE'])]
+    public function delete(Movie $movie): Response
     {
-        $movie = $this->movieRepository->find($movie);
         $this->em->remove($movie);
         $this->em->flush();
 
         return $this->redirectToRoute('movies_list');
     }
 
-    #[Route('/movies/{movie}', name: 'movies_show', requirements: ['movie' => '\d+'], methods: ['GET'])]
-    public function show(int $movie): Response
+    #[Route('/movies/{id}', name: 'movies_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function show(Movie $movie): Response
     {
-        $movie = $this->movieRepository->find($movie);
-
-        if ($movie) {
-            return $this->render('movie/show.html.twig', ['movie' => $movie]);
-        }
-
-        throw $this->createNotFoundException('The movie does not exist');
-    }
-
-    private function storeImage(Movie $movie, UploadedFile $imagePath)
-    {
-        $newFileName = uniqid() . '.' . $imagePath->guessExtension();
-
-        try {
-            $imagePath
-                ->move($this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName);
-        } catch (FileException $e) {
-            new Response($e->getMessage());
-        }
-
-        $movie->setImage('/uploads/' . $newFileName);
+        return $this->render('movie/show.html.twig', ['movie' => $movie]);
     }
 }

@@ -11,8 +11,8 @@
     <div class="mt-4">
         {% if app.user %}
             {% if app.user.isAdmin() %}
-                <a href="{{ path("movies_update", {movie: movie.id}) }}" class="h4 btn btn-outline-dark">Update</a>
-                <a href="{{ path("movies_delete", {movie: movie.id}) }}" class="h4 btn btn-outline-danger">Delete</a>
+                <a href="{{ path("movies_update", {id: movie.id}) }}" class="h4 btn btn-outline-dark">Update</a>
+                <a href="{{ path("movies_delete", {id: movie.id}) }}" class="h4 btn btn-outline-danger">Delete</a>
                 <br>
             {% endif %}
         {% endif %}

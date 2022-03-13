@@ -8,7 +8,6 @@ use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 class Actor
@@ -19,7 +18,6 @@ class Actor
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
     private $name;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]

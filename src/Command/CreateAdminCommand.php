@@ -42,12 +42,12 @@ class CreateAdminCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $user = new User();
         $name = $input->getArgument('name');
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
         if ($email && $password && $name) {
+            $user = new User();
             $user->setName($name);
             $user->setEmail($email);
             $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
