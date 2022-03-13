@@ -20,9 +20,9 @@ class MovieFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('rating', IntegerType::class)
+            ->add('rating', IntegerType::class, ['required' => false])
             ->add('description', TextareaType::class)
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, ['required' => false, 'mapped' => false])
             ->add('submit', SubmitType::class)
         ;
     }

@@ -8,10 +8,9 @@ use App\Entity\Movie;
 use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,18 +41,7 @@ class MoviesController extends AbstractController
             $imagePath = $form->get('image')->getData();
 
             if ($imagePath) {
-                $newFileName = uniqid() . '.' . $imagePath->guessExtension();
-
-                try {
-                    $imagePath->move(
-                        $this->getParameter('kernel.project_dir') . '/public/uploads',
-                        $newFileName
-                    );
-                } catch (FileException $e) {
-                    new Response($e->getMessage());
-                }
-
-                $newMovie->setImage('/uploads/' . $newFileName);
+                $this->storeImage($newMovie, $imagePath);
             }
 
             $this->em->persist($newMovie);
@@ -77,36 +65,15 @@ class MoviesController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($imagePath) {
-                if ($movie->getImage() !== null) {
-                    if (file_exists(
-                        $this->getParameter('kernel.project_dir') . $movie->getImage()
-                    )) {
-                        $this->GetParameter('kernel.project_dir') . $movie->getImage();
-                    }
-                    $newFileName = uniqid() . '.' . $imagePath->guessExtension();
-
-                    try {
-                        $imagePath->move(
-                            $this->getParameter('kernel.project_dir') . '/public/uploads',
-                            $newFileName
-                        );
-                    } catch (FileException $e) {
-                        return new Response($e->getMessage());
-                    }
-
-                    $movie->setImage('/uploads/' . $newFileName);
-                    $this->em->flush();
-
-                    return $this->redirectToRoute('movies');
-                }
-            } else {
-                $movie->setTitle($form->get('title')->getData());
-                $movie->setRating($form->get('rating')->getData());
-                $movie->setDescription($form->get('description')->getData());
-
-                $this->em->flush();
-                return $this->redirectToRoute('movies_list');
+                $this->storeImage($movie, $imagePath);
             }
+            $movie->setTitle($form->get('title')->getData());
+            $movie->setRating($form->get('rating')->getData());
+            $movie->setDescription($form->get('description')->getData());
+
+            $this->em->flush();
+
+            return $this->redirectToRoute('movies_list');
         }
 
         return $this->renderForm('movies/update.html.twig', [
@@ -135,5 +102,19 @@ class MoviesController extends AbstractController
         }
 
         throw $this->createNotFoundException('The movie does not exist');
+    }
+
+    private function storeImage(Movie $movie, UploadedFile $imagePath)
+    {
+        $newFileName = uniqid() . '.' . $imagePath->guessExtension();
+
+        try {
+            $imagePath
+                ->move($this->getParameter('kernel.project_dir') . '/public/uploads', $newFileName);
+        } catch (FileException $e) {
+            new Response($e->getMessage());
+        }
+
+        $movie->setImage('/uploads/' . $newFileName);
     }
 }

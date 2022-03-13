@@ -28,19 +28,6 @@ class Movie
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
-    #[Assert\Image([
-        'maxSize' => "10M",
-        'minWidth' => 200,
-        'maxWidth' => 5000,
-        'minHeight' => 200,
-        'maxHeight' => 5000,
-        'mimeTypes' => [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "image/gif",
-        ]
-    ])]
     private $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
