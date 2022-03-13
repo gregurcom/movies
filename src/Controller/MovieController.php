@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MoviesController extends AbstractController
+class MovieController extends AbstractController
 {
     public function __construct(
         private MovieRepository $movieRepository,
@@ -25,7 +25,7 @@ class MoviesController extends AbstractController
     #[Route('/movies', name: 'movies_list', methods: ['GET'])]
     public function list(): Response
     {
-        return $this->render('movies/list.html.twig', ['movies' => $this->movieRepository->findAll()]);
+        return $this->render('movie/list.html.twig', ['movies' => $this->movieRepository->findAll()]);
     }
 
     #[Route('/movies/create', name: 'movies_create')]
@@ -50,7 +50,7 @@ class MoviesController extends AbstractController
             return $this->redirectToRoute('movies_list');
         }
 
-        return $this->renderForm('movies/create.html.twig', ['form' => $form]);
+        return $this->renderForm('movie/create.html.twig', ['form' => $form]);
     }
 
     #[Route('/movies/{movie}/update', name: 'movies_update', requirements: ['movie' => '\d+'])]
@@ -76,14 +76,14 @@ class MoviesController extends AbstractController
             return $this->redirectToRoute('movies_list');
         }
 
-        return $this->renderForm('movies/update.html.twig', [
+        return $this->renderForm('movie/update.html.twig', [
             'movie' => $movie,
             'form' => $form
         ]);
     }
 
     #[Route('/movies/{movie}/delete', name: 'movies_delete', methods: ['GET', 'DELETE'])]
-    public function delete($movie): Response
+    public function delete(int $movie): Response
     {
         $movie = $this->movieRepository->find($movie);
         $this->em->remove($movie);
@@ -98,7 +98,7 @@ class MoviesController extends AbstractController
         $movie = $this->movieRepository->find($movie);
 
         if ($movie) {
-            return $this->render('movies/show.html.twig', ['movie' => $movie]);
+            return $this->render('movie/show.html.twig', ['movie' => $movie]);
         }
 
         throw $this->createNotFoundException('The movie does not exist');
