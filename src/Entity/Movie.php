@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,27 +12,36 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: ['get' => ['normalization_context' => ['groups' => 'movie:list']]],
+    itemOperations: ['get' => ['normalization_context' => ['groups' => 'movie:item']]],
+    paginationEnabled: false,
+)]
 class Movie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['movie:list', 'movie:item'])]
     private $id;
 
     #[ORM\Column(type: 'string', length: 150)]
+    #[Groups(['movie:list', 'movie:item'])]
     private $title;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups(['movie:list', 'movie:item'])]
     private $rating;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['movie:list', 'movie:item'])]
     private $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
     private $actors;
 
     #[ORM\Column(type: 'text')]
+    #[Groups(['movie:list', 'movie:item'])]
     private $description;
 
     public function __construct()
