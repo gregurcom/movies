@@ -28,7 +28,7 @@ class MovieController extends AbstractController
         return $this->render('movie/list.html.twig', ['movies' => $this->movieRepository->findAll()]);
     }
 
-    #[Route('/movies/create', name: 'movies_create')]
+    #[Route('/movies/create', name: 'movies_create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, MovieService $movieService): Response
     {
@@ -53,7 +53,7 @@ class MovieController extends AbstractController
         return $this->renderForm('movie/create.html.twig', ['form' => $form]);
     }
 
-    #[Route('/movies/{id}/update', name: 'movies_update', requirements: ['id' => '\d+'])]
+    #[Route('/movies/{id}/update', name: 'movies_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {

@@ -23,7 +23,7 @@ class MovieService
 
         try {
             $imagePath
-                ->move($this->container->getParameter('images_directory'), $fileName);
+                ->move($this->container->getParameter('app.images_directory'), $fileName);
         } catch (FileException $e) {
             new Response($e->getMessage());
         }

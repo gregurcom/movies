@@ -4,10 +4,13 @@
 
 {% block body %}
 <div class="container mt-2">
-    <h1 class="text-center mb-3">Movies</h1>
+    <h1 class="text-center mb-3">{% trans into app.request.locale %} Movies {% endtrans %}</h1>
     {% if app.user %}
         {% if app.user.isAdmin() %}
-            <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">Create movie</a>
+            <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">
+                {% trans into app.request.locale %} Create {% endtrans %}
+                {% trans into app.request.locale %} Movies {% endtrans %}
+            </a>
         {% endif %}
     {% endif %}
 
