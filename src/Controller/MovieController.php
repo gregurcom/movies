@@ -10,8 +10,7 @@ use App\Repository\MovieRepository;
 use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +29,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies/create', name: 'movies_create')]
+    #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, MovieService $movieService): Response
     {
         $movie = new Movie();
@@ -54,6 +54,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies/{id}/update', name: 'movies_update', requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
         $form = $this->createForm(MovieFormType::class, $movie);
@@ -78,6 +79,7 @@ class MovieController extends AbstractController
     }
 
     #[Route('/movies/{id}/delete', name: 'movies_delete', requirements: ['id' => '\d+'], methods: ['GET', 'DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Movie $movie): Response
     {
         $this->em->remove($movie);
