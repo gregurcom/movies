@@ -29,6 +29,20 @@
                 </div>
             </div>
         {% endfor %}
+        {% if previous >= 0 %}
+            <div class="text-center mt-5">
+                <a href="{{ path('movies_list', { offset: previous }) }}" class="btn btn-outline-dark w-25">
+                    {% trans into app.request.locale %} Previous {% endtrans %}
+                </a>
+            </div>
+        {% endif %}
+        {% if next < movies|length %}
+            <div class="text-center mt-5">
+                <a href="{{ path('movies_list', { offset: next }) }}" class="btn btn-outline-dark w-25">
+                    {% trans into app.request.locale %} Next {% endtrans %}
+                </a>
+            </div>
+        {% endif %}
     {% else %}
         <div class="alert alert-info mt-3">
             There are no movies yet!

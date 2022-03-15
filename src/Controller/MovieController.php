@@ -23,9 +23,16 @@ class MovieController extends AbstractController
     ) {}
 
     #[Route('/movies', name: 'movies_list', methods: ['GET'])]
-    public function list(): Response
+    public function list(Request $request): Response
     {
-        return $this->render('movie/list.html.twig', ['movies' => $this->movieRepository->findAll()]);
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $this->movieRepository->getMoviesPaginator($offset);
+
+        return $this->render('movie/list.html.twig', [
+            'movies' => $paginator,
+            'previous' => $offset - MovieRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + MovieRepository::PAGINATOR_PER_PAGE)
+        ]);
     }
 
     #[Route('/movies/create', name: 'movies_create', methods: ['GET', 'POST'])]
