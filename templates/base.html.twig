@@ -47,9 +47,9 @@
                 {% endif %}
             </ul>
             <div class="d-flex align-items-center">
-                <a href="{{ path('translate', {lang: 'en'}) }}"><span class="fi-gb fi"></span></a>
+                <a href="{{ path('translate', {lang: 'en'}) }}"><span class="fi-gb fi {{ app.request.locale == 'en' ? 'selected' : '' }}"></span></a>
                 <div class="px-1"></div>
-                <a href="{{ path('translate', {lang: 'fr'}) }}"><span class="fi-fr fi"></span></a>
+                <a href="{{ path('translate', {lang: 'fr'}) }}"><span class="fi-fr fi {{ app.request.locale == 'fr' ? 'selected' : '' }}"></span></a>
             </div>
         </header>
     </div>
