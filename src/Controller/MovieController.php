@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/movies', name: 'movies_')]
 class MovieController extends AbstractController
 {
     public function __construct(
@@ -22,7 +23,7 @@ class MovieController extends AbstractController
         private EntityManagerInterface $em,
     ) {}
 
-    #[Route('/movies', name: 'movies_list', methods: ['GET'])]
+    #[Route('/', name: 'list', methods: ['GET'])]
     public function list(Request $request): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
@@ -35,7 +36,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/movies/create', name: 'movies_create', methods: ['GET', 'POST'])]
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, MovieService $movieService): Response
     {
@@ -54,13 +55,15 @@ class MovieController extends AbstractController
             $this->em->persist($movie);
             $this->em->flush();
 
+            $this->addFlash('notice', 'You have successfully created a movie');
+
             return $this->redirectToRoute('movies_list');
         }
 
         return $this->renderForm('movie/create.html.twig', ['form' => $form]);
     }
 
-    #[Route('/movies/{id}/update', name: 'movies_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
@@ -76,6 +79,8 @@ class MovieController extends AbstractController
 
             $this->em->flush();
 
+            $this->addFlash('notice', 'You have successfully updated a movie');
+
             return $this->redirectToRoute('movies_list');
         }
 
@@ -85,7 +90,7 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/movies/{id}/delete', name: 'movies_delete', requirements: ['id' => '\d+'], methods: ['GET', 'DELETE'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET', 'DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
     public function delete(Movie $movie): Response
     {
@@ -95,7 +100,7 @@ class MovieController extends AbstractController
         return $this->redirectToRoute('movies_list');
     }
 
-    #[Route('/movies/{id}', name: 'movies_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Movie $movie): Response
     {
         return $this->render('movie/show.html.twig', ['movie' => $movie]);

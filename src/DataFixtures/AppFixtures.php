@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Actor;
+use App\Entity\Category;
 use App\Entity\Movie;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -15,9 +16,25 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $this->loadCategories($manager);
         $this->loadUsers($manager);
         $this->loadActors($manager);
         $this->loadMovies($manager);
+    }
+
+    private function loadCategories(ObjectManager $manager): void
+    {
+        foreach ($this->getCategories() as $title) {
+            $category = new Category();
+            $category->setTitle($title);
+            $slug = str_replace(' ', '-', $title);
+            $category->setSlug($slug);
+
+            $manager->persist($category);
+            $this->addReference($title, $category);
+        }
+
+        $manager->flush();
     }
 
     private function loadUsers(ObjectManager $manager): void
@@ -43,6 +60,8 @@ class AppFixtures extends Fixture
             $movie->setTitle($title);
             $movie->setRating($rating);
             $movie->setDescription($description);
+            $movie->addActor($this->getReference($this->getActors()[rand(0, count($this->getActors()) - 1)]));
+            $movie->setCategory($this->getReference($this->getCategories()[rand(0, count($this->getCategories()) - 1)]));
 
             $manager->persist($movie);
         }
@@ -56,6 +75,7 @@ class AppFixtures extends Fixture
             $actor = new Actor();
             $actor->setName($name);
             $manager->persist($actor);
+            $this->setReference($name, $actor);
         }
 
         $manager->flush();
@@ -74,11 +94,12 @@ class AppFixtures extends Fixture
     private function getMovieData(): array
     {
         $movies = [];
-        foreach ($this->getPhrases() as $title) {
+        foreach ($this->getPhrases() as $i => $title) {
             $movies[] = [
                 $title,
                 rand(0, 10),
                 $this->getMovieDescription(),
+                $this->getReference(['jane_admin', 'tom_admin'][0 === $i ? 0 : random_int(0, 1)]),
             ];
         }
 
@@ -133,6 +154,57 @@ class AppFixtures extends Fixture
             'Poj Kand',
             'Ibr Ugany',
             'Pag Hjsc',
+        ];
+    }
+
+    public function getCategories()
+    {
+        return [
+            'Action',
+            'Comedy',
+            'Drama',
+            'Fantasy',
+            'Horror',
+            'Mystery',
+            'Romance',
+            'Thriller',
+            'Western',
+        ];
+    }
+
+    public function getComments()
+    {
+        return [
+            'Lorem ipsum dolor sit',
+            'Pellentesque vitae velit ex',
+            'Mauris dapibus risus quis',
+            'Eros diam',
+            'In hac habitasse',
+            'Morbi tempus commodo mattis',
+            'Ut suscipit posuere',
+            'Ut eleifend mauris et',
+            'Aliquam sodales odio id eleifend',
+            'Urna nisl sollicitudin',
+            'Nulla porta lobortis',
+            'Curabitur aliquam euismod',
+            'Sed varius a risus eget aliquam',
+            'Nunc viverra elit ac laoreet suscipit',
+            'Pellentesque et sapien',
+            'Ubi est barbatus nix',
+            'Abnobas sunt hilotaes',
+            'Ubi est audax amicitia',
+            'Eposs sunt solems',
+            'Vae humani generis',
+            'Diatrias tolerare',
+            'Teres talis saepe tractare',
+            'Silva de secundus galatae demitto quadra',
+            'Sunt accentores vitare salvus flavum parses',
+            'Potus sensim ad ferox abnoba',
+            'Sunt seculaes transferre',
+            'Era brevis ratione est',
+            'Sunt torquises imitari velox',
+            'Mineralis persuadere omnes finises desiderium',
+            'Bassus fatalis classiss',
         ];
     }
 

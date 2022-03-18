@@ -44,9 +44,17 @@ class Movie
     #[Groups(['movie:list', 'movie:item'])]
     private $description;
 
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $category;
+
+    #[ORM\OneToMany(mappedBy: 'movie', targetEntity: Comment::class)]
+    private $comments;
+
     public function __construct()
     {
         $this->actors = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -134,6 +142,48 @@ class Movie
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getMovie() === $this) {
+                $comment->setMovie(null);
+            }
+        }
 
         return $this;
     }
