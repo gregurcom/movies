@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Movie;
 use App\Form\MovieFormType;
+use App\Repository\CategoryRepository;
 use App\Repository\MovieRepository;
 use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +39,7 @@ class MovieController extends AbstractController
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function create(Request $request, MovieService $movieService): Response
+    public function create(Request $request, MovieService $movieService, CategoryRepository $categoryRepository): Response
     {
         $movie = new Movie();
         $form = $this->createForm(MovieFormType::class, $movie);
@@ -46,6 +47,8 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $category = $categoryRepository->find($request->request->get('category'));
+            $movie->setCategory($category);
             $imagePath = $form->get('image')->getData();
 
             if ($imagePath) {
@@ -60,7 +63,9 @@ class MovieController extends AbstractController
             return $this->redirectToRoute('movies_list');
         }
 
-        return $this->renderForm('movie/create.html.twig', ['form' => $form]);
+        $categories = $categoryRepository->findAll();
+
+        return $this->renderForm('movie/create.html.twig', ['form' => $form, 'categories' => $categories]);
     }
 
     #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]

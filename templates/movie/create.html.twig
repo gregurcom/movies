@@ -4,6 +4,14 @@
 
 {% block body %}
     <div class="example-wrapper" style="margin: 50px;">
-        {{ form(form) }}
+        {{ form_start(form) }}
+            <select class="form-select mb-2" aria-label="Default select example" name="category">
+                <option selected>Choose category</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
+            </select>
+            {{ form(form) }}
+        {{ form_end(form) }}
     </div>
 {% endblock %}
