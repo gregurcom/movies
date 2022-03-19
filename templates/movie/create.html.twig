@@ -9,6 +9,9 @@
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" name="title">
+                {% if errorMessages['title'] %}
+                    <span class="text-danger">{{ errorMessages['title'] }}</span>
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
@@ -17,18 +20,30 @@
                         <option value="{{ category.id }}">{{ category.title }}</option>
                     {% endfor %}
                 </select>
+                {% if errorMessages['category'] %}
+                    <span class="text-danger">{{ errorMessages['category'] }}</span>
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description"></textarea>
+                {% if errorMessages['description'] %}
+                    <span class="text-danger">{{ errorMessages['description'] }}</span>
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label for="rating" class="form-label">Rating</label>
                 <input type="number" class="form-control" id="rating" name="rating">
+                {% if errorMessages['rating'] %}
+                    <span class="text-danger">{{ errorMessages['rating'] }}</span>
+                {% endif %}
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Image</label>
                 <input type="file" class="form-control" id="image" name="image">
+                {% if errorMessages['image'] %}
+                    <span class="text-danger">{{ errorMessages['image'] }}</span>
+                {% endif %}
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>

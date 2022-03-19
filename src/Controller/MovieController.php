@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use ApiPlatform\Core\Validator\Exception\ValidationException;
 use App\Entity\Movie;
 use App\Form\MovieUpdateFormType;
 use App\Repository\CategoryRepository;
@@ -25,6 +24,7 @@ class MovieController extends AbstractController
     public function __construct(
         private MovieRepository $movieRepository,
         private CategoryRepository $categoryRepository,
+        private MovieService $movieService,
         private EntityManagerInterface $em,
     ) {}
 
@@ -47,15 +47,16 @@ class MovieController extends AbstractController
     {
         $categories = $this->categoryRepository->findAll();
 
-        return $this->render('movie/create.html.twig', ['categories' => $categories]);
+        return $this->render('movie/create.html.twig', [
+            'categories' => $categories,
+            'errorMessages' => $this->movieService->getMovieFields(),
+        ]);
     }
 
     #[Route('/store', name: 'store', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function store(Request $request, MovieService $movieService, LoggerInterface $logger, ValidatorInterface $validator): Response
+    public function store(Request $request, LoggerInterface $logger, ValidatorInterface $validator): Response
     {
-        $movie = new Movie();
-
         $token = $request->get("token");
         if (!$this->isCsrfTokenValid('store', $token))
         {
@@ -64,20 +65,26 @@ class MovieController extends AbstractController
             return new Response("Operation not allowed", Response::HTTP_BAD_REQUEST);
         }
 
+        $movie = new Movie();
+        $category = $this->categoryRepository->find($request->get('category'));
+
         $movie->setTitle($request->get('title'));
         $movie->setRating((float)$request->get('rating'));
         $movie->setDescription($request->get('description'));
-        $category = $this->categoryRepository->find($request->get('category'));
         $movie->setCategory($category);
 
         $imagePath = $request->files->get('image');
         if ($imagePath) {
-            $movieService->storeImage($movie, $imagePath);
+            $this->movieService->storeImage($movie, $imagePath);
         }
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
-            throw new ValidationException((string)$errors);
+
+            return $this->render('movie/create.html.twig', [
+                'errorMessages' => $this->movieService->getErrorMessages($errors),
+                'categories' => $this->categoryRepository->findAll(),
+            ]);
         }
 
         $this->em->persist($movie);

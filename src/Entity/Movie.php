@@ -47,6 +47,7 @@ class Movie
     #[ORM\Column(type: 'text')]
     #[Groups(['movie:list', 'movie:item'])]
     #[Assert\NotBlank]
+    #[Assert\Length(min: 2)]
     private $description;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies')]

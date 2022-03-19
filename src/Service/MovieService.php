@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use ApiPlatform\Core\Validator\Exception\ValidationException;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints\Image;
 use App\Entity\Movie;
@@ -52,5 +53,27 @@ class MovieService
         }
 
         $movie->setImage($fileName);
+    }
+
+    public function getMovieFields(): array
+    {
+        return [
+            'title' => null,
+            'category' => null,
+            'rating' => null,
+            'description' => null,
+            'image' => null
+        ];
+    }
+
+    public function getErrorMessages(ConstraintViolationListInterface $errors): array
+    {
+        $errorMessages = $this->getMovieFields();
+
+        foreach ($errors as $violation) {
+            $errorMessages[$violation->getPropertyPath()] = $violation->getMessage();
+        }
+
+        return $errorMessages;
     }
 }

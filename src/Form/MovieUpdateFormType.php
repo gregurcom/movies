@@ -33,7 +33,10 @@ class MovieUpdateFormType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => true,
             ])
-            ->add('image', FileType::class)
+            ->add('image', FileType::class, [
+                'required' => false,
+                'mapped' => false,
+            ])
             ->add('submit', SubmitType::class)
         ;
     }
