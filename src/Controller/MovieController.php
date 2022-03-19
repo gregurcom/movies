@@ -4,23 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use ApiPlatform\Core\Validator\Exception\ValidationException;
 use App\Entity\Movie;
-use App\Form\MovieFormType;
+use App\Form\MovieUpdateFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\MovieRepository;
 use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/movies', name: 'movies_')]
 class MovieController extends AbstractController
 {
     public function __construct(
         private MovieRepository $movieRepository,
+        private CategoryRepository $categoryRepository,
         private EntityManagerInterface $em,
     ) {}
 
@@ -37,42 +41,57 @@ class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    #[Route('/create', name: 'create', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function create(Request $request, MovieService $movieService, CategoryRepository $categoryRepository): Response
+    public function create(): Response
+    {
+        $categories = $this->categoryRepository->findAll();
+
+        return $this->render('movie/create.html.twig', ['categories' => $categories]);
+    }
+
+    #[Route('/store', name: 'store', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function store(Request $request, MovieService $movieService, LoggerInterface $logger, ValidatorInterface $validator): Response
     {
         $movie = new Movie();
-        $form = $this->createForm(MovieFormType::class, $movie);
 
-        $form->handleRequest($request);
+        $token = $request->get("token");
+        if (!$this->isCsrfTokenValid('store', $token))
+        {
+            $logger->info("CSRF failure");
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $category = $categoryRepository->find($request->request->get('category'));
-            $movie->setCategory($category);
-            $imagePath = $form->get('image')->getData();
-
-            if ($imagePath) {
-                $movieService->storeImage($movie, $imagePath);
-            }
-
-            $this->em->persist($movie);
-            $this->em->flush();
-
-            $this->addFlash('notice', 'You have successfully created a movie');
-
-            return $this->redirectToRoute('movies_list');
+            return new Response("Operation not allowed", Response::HTTP_BAD_REQUEST);
         }
 
-        $categories = $categoryRepository->findAll();
+        $movie->setTitle($request->get('title'));
+        $movie->setRating((float)$request->get('rating'));
+        $movie->setDescription($request->get('description'));
+        $category = $this->categoryRepository->find($request->get('category'));
+        $movie->setCategory($category);
 
-        return $this->renderForm('movie/create.html.twig', ['form' => $form, 'categories' => $categories]);
+        $imagePath = $request->files->get('image');
+        if ($imagePath) {
+            $movieService->storeImage($movie, $imagePath);
+        }
+
+        $errors = $validator->validate($movie);
+        if (count($errors) > 0) {
+            throw new ValidationException((string)$errors);
+        }
+
+        $this->em->persist($movie);
+        $this->em->flush();
+        $this->addFlash('notice', 'You have successfully created a movie');
+
+        return $this->redirectToRoute('movies_list');
     }
 
     #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
-        $form = $this->createForm(MovieFormType::class, $movie);
+        $form = $this->createForm(MovieUpdateFormType::class, $movie);
 
         $form->handleRequest($request);
         $imagePath = $form->get('image')->getData();
@@ -83,7 +102,6 @@ class MovieController extends AbstractController
             }
 
             $this->em->flush();
-
             $this->addFlash('notice', 'You have successfully updated a movie');
 
             return $this->redirectToRoute('movies_list');
@@ -101,6 +119,7 @@ class MovieController extends AbstractController
     {
         $this->em->remove($movie);
         $this->em->flush();
+        $this->addFlash('notice', 'You have successfully deleted a movie');
 
         return $this->redirectToRoute('movies_list');
     }

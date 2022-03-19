@@ -6,7 +6,6 @@ namespace App\Form;
 
 use App\Entity\Movie;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +17,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Positive;
 
-class MovieFormType extends AbstractType
+class MovieUpdateFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -34,23 +33,7 @@ class MovieFormType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => true,
             ])
-            ->add('image', FileType::class, [
-                'required' => false,
-                'mapped' => false,
-                'constraints' => new Image([
-                    'maxSize' => "10M",
-                    'minWidth' => 200,
-                    'maxWidth' => 5000,
-                    'minHeight' => 200,
-                    'maxHeight' => 5000,
-                    'mimeTypes' => [
-                        "image/jpeg",
-                        "image/jpg",
-                        "image/png",
-                        "image/gif",
-                    ],
-                ]),
-            ])
+            ->add('image', FileType::class)
             ->add('submit', SubmitType::class)
         ;
     }

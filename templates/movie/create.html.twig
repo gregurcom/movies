@@ -4,14 +4,33 @@
 
 {% block body %}
     <div class="example-wrapper" style="margin: 50px;">
-        {{ form_start(form) }}
-            <select class="form-select mb-2" aria-label="Default select example" name="category">
-                <option selected>Choose category</option>
-                {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.title }}</option>
-                {% endfor %}
-            </select>
-            {{ form(form) }}
-        {{ form_end(form) }}
+        <form action="{{ path('movies_store') }}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="token" value="{{ csrf_token('store') }}"/>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" name="category" id="category">
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="number" class="form-control" id="rating" name="rating">
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 {% endblock %}

@@ -12,11 +12,7 @@ use Symfony\Component\Mime\Address;
 
 class RegistrationNotificationSubscriber implements EventSubscriberInterface
 {
-    public function __construct(
-        private MailerInterface $mailer,
-        private string $sender
-    ) {
-    }
+    public function __construct(private MailerInterface $mailer, private string $sender) {}
 
     public static function getSubscribedEvents(): array
     {

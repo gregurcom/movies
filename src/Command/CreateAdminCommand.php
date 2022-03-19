@@ -46,16 +46,14 @@ class CreateAdminCommand extends Command
         $email = $input->getArgument('email');
         $password = $input->getArgument('password');
 
-        if ($email && $password && $name) {
-            $user = new User();
-            $user->setName($name);
-            $user->setEmail($email);
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
-            $user->setRoles(['ROLE_ADMIN']);
+        $user = new User();
+        $user->setName($name);
+        $user->setEmail($email);
+        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password));
+        $user->setRoles(['ROLE_ADMIN']);
 
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-        }
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         $io->success('You successfully created an admin account!');
 
