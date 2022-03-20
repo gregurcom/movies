@@ -39,6 +39,9 @@ class Movie
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['movie:list', 'movie:item'])]
+    /**
+     * @Assert\Image(mimeTypes={"image/png", "image/jpeg", "image/jpg", "image/gif"})
+     */
     private $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]

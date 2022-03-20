@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Exception\InvalidArgumentException;
 
 class TranslateController extends AbstractController
 {
@@ -16,6 +17,7 @@ class TranslateController extends AbstractController
     public function translate(Request $request, RequestStack $requestStack): RedirectResponse
     {
         $uri = $request->query->get('uri');
+
         $session = $requestStack->getSession();
         $session->set('_locale', $request->get('_locale'));
 
@@ -23,6 +25,8 @@ class TranslateController extends AbstractController
             $uri = str_replace('en', 'fr', $uri);
         } elseif (str_contains($uri, 'fr')) {
             $uri = str_replace('fr', 'en', $uri);
+        } else {
+            throw new InvalidArgumentException();
         }
 
         return $this->redirect($uri);

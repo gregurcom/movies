@@ -9,6 +9,7 @@ use App\Form\MovieUpdateFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\MovieRepository;
 use App\Service\MovieService;
+use App\Service\ValidationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,7 @@ class MovieController extends AbstractController
         private MovieRepository $movieRepository,
         private CategoryRepository $categoryRepository,
         private MovieService $movieService,
+        private ValidationService $validationService,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
     ) {}
@@ -68,25 +70,30 @@ class MovieController extends AbstractController
         }
 
         $movie = new Movie();
+        $imagePath = $request->files->get('image');
         $category = $this->categoryRepository->find($request->get('category'));
+        if (!$category) {
+            throw $this->createNotFoundException('No category found for id ' . $request->get('category'));
+        }
 
         $movie->setTitle($request->get('title'));
         $movie->setRating((float)$request->get('rating'));
         $movie->setDescription($request->get('description'));
         $movie->setCategory($category);
-
-        $imagePath = $request->files->get('image');
         if ($imagePath) {
-            $this->movieService->storeImage($movie, $imagePath);
+            $movie->setImage($imagePath->getPathName());
         }
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
-
             return $this->render('movie/create.html.twig', [
-                'errorMessages' => $this->movieService->getErrorMessages($errors),
+                'errorMessages' => $this->validationService->getErrorMessages($errors, $this->movieService->getMovieFields()),
                 'categories' => $this->categoryRepository->findAll(),
             ]);
+        }
+
+        if ($imagePath) {
+            $this->movieService->storeImage($movie, $imagePath);
         }
 
         $this->em->persist($movie);
@@ -103,9 +110,8 @@ class MovieController extends AbstractController
         $form = $this->createForm(MovieUpdateFormType::class, $movie);
 
         $form->handleRequest($request);
-        $imagePath = $form->get('image')->getData();
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $imagePath = $form->get('image')->getData();
             if ($imagePath) {
                 $movieService->storeImage($movie, $imagePath);
             }
