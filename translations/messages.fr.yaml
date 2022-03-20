@@ -1,10 +1,27 @@
-Movies: Films
-Create: Créer
-Update: Mettre à jour
-Profile: Profil
-Home: Domicile
-Logout: Se déconnecter
-Login: Connexion
-Delete: Effacer
-Next: Suivante
-Previous: Précédente
+buttons:
+    create: Créer
+    update: Mettre à jour
+    logout: Se déconnecter
+    login: Connexion
+    delete: Effacer
+    next: Suivante
+    previous: Précédente
+titles:
+    movies: Films
+    profile: Profil
+    home: Domicile
+    rating: Notation
+    register: S'inscrire
+form:
+    labels:
+        title: Titre
+        category: Catégorie
+        description: La description
+        rating: Notation
+        image: Image
+        password: Mot de passe
+        email: Email
+    buttons:
+        submit: Nous faire parvenir
+        register: S'inscrire
+        sign: S'identifier

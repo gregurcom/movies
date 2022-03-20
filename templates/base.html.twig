@@ -19,37 +19,37 @@
             <ul class="nav nav-pills">
                 <li class="nav-item px-2">
                     <a href="{{ path('movies_list') }}" class="btn btn-outline-dark" aria-current="page">
-                        {% trans into app.request.locale %} Home {% endtrans %}
+                        {% trans %}titles.home{% endtrans %}
                     </a>
                 </li>
                 <li class="nav-item px-2">
                     <a href="{{ path('movies_list') }}" class="btn btn-outline-dark">
-                        {% trans into app.request.locale %} Movies {% endtrans %}
+                        {% trans %}titles.movies{% endtrans %}
                     </a>
                 </li>
                 {% if app.user %}
                     <li class="nav-item px-2">
                         <a href="{{ path('profile') }}" class="btn btn-outline-dark">
-                            {% trans into app.request.locale %} Profile {% endtrans %}
+                            {% trans %}titles.profile{% endtrans %}
                         </a>
                     </li>
                     <li class="nav-item px-2">
                         <a href="{{ path('app_logout') }}" class="btn btn-outline-dark">
-                            {% trans into app.request.locale %} Logout {% endtrans %}
+                            {% trans %}buttons.logout{% endtrans %}
                         </a>
                     </li>
                 {% else %}
                     <li class="nav-item px-2">
                         <a href="{{ path('app_login') }}" class="btn btn-outline-dark">
-                            {% trans into app.request.locale %} Login {% endtrans %}
+                            {% trans %}buttons.login{% endtrans %}
                         </a>
                     </li>
                 {% endif %}
             </ul>
             <div class="d-flex align-items-center">
-                <a href="{{ path('translate', {lang: 'en'}) }}"><span class="fi-gb fi {{ app.request.locale == 'en' ? 'selected' : '' }}"></span></a>
+                <a href="{{ path('translate', {_locale: 'en', 'uri': app.request.uri}) }}"><span class="fi-gb fi {{ app.request.locale == 'en' ? 'selected' : '' }}"></span></a>
                 <div class="px-1"></div>
-                <a href="{{ path('translate', {lang: 'fr'}) }}"><span class="fi-fr fi {{ app.request.locale == 'fr' ? 'selected' : '' }}"></span></a>
+                <a href="{{ path('translate', {_locale: 'fr', 'uri': app.request.uri}) }}"><span class="fi-fr fi {{ app.request.locale == 'fr' ? 'selected' : '' }}"></span></a>
             </div>
         </header>
     </div>

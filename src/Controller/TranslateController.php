@@ -6,21 +6,25 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TranslateController extends AbstractController
 {
-    #[Route('/translate/{lang}', name: 'translate', defaults: ['lang' => 'en'])]
-    public function translate(string $lang, RequestStack $requestStack): RedirectResponse
+    #[Route('/{_locale}/translate', name: 'translate', requirements: ['_locale' => 'en|fr'])]
+    public function translate(Request $request, RequestStack $requestStack): RedirectResponse
     {
-        if (in_array($lang, $this->getParameter('app.supported_locales'))) {
-            $session = $requestStack->getSession();
-            $session->set('_locale', $lang);
+        $uri = $request->query->get('uri');
+        $session = $requestStack->getSession();
+        $session->set('_locale', $request->get('_locale'));
 
-            return $this->redirectToRoute('movies_list');
+        if (str_contains($uri, 'en')) {
+            $uri = str_replace('en', 'fr', $uri);
+        } elseif (str_contains($uri, 'fr')) {
+            $uri = str_replace('fr', 'en', $uri);
         }
 
-        throw new \InvalidArgumentException('No such language found');
+        return $this->redirect($uri);
     }
 }

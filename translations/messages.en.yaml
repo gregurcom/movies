@@ -1,0 +1,27 @@
+buttons:
+    create: Create
+    update: Update
+    logout: Logout
+    login: Login
+    delete: Delete
+    next: Next
+    previous: Previous
+titles:
+    movies: Movies
+    profile: Profil
+    home: Home
+    rating: Rating
+    register: Register
+form:
+    labels:
+        title: Title
+        category: Category
+        description: Description
+        rating: Rating
+        image: Image
+        password: Password
+        email: Email
+    buttons:
+        submit: Submit
+        register: Register
+        sign: Sign in

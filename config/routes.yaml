@@ -10,5 +10,5 @@ homepage:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
     defaults:
-        path: /movies
+        path: '/%app.default_language%/movies'
         permanent: true

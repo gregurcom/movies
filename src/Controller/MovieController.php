@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/movies', name: 'movies_')]
+#[Route('/{_locale}/movies', name: 'movies_', requirements: ['_locale' => 'en|fr'])]
 class MovieController extends AbstractController
 {
     public function __construct(

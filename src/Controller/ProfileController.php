@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'profile')]
+    #[Route('{_locale}/profile', name: 'profile', requirements: ['_locale' => 'en|fr'])]
     public function index(): Response
     {
         return $this->render('profile/index.html.twig');
