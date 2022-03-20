@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/{_locale}/movies', name: 'movies_', requirements: ['_locale' => 'en|fr'])]
 class MovieController extends AbstractController
@@ -25,6 +26,7 @@ class MovieController extends AbstractController
         private MovieRepository $movieRepository,
         private CategoryRepository $categoryRepository,
         private MovieService $movieService,
+        private TranslatorInterface $translator,
         private EntityManagerInterface $em,
     ) {}
 
@@ -89,7 +91,7 @@ class MovieController extends AbstractController
 
         $this->em->persist($movie);
         $this->em->flush();
-        $this->addFlash('notice', 'You have successfully created a movie');
+        $this->addFlash('notice', $this->translator->trans('alerts.created'));
 
         return $this->redirectToRoute('movies_list');
     }
@@ -109,7 +111,7 @@ class MovieController extends AbstractController
             }
 
             $this->em->flush();
-            $this->addFlash('notice', 'You have successfully updated a movie');
+            $this->addFlash('notice', $this->translator->trans('alerts.updated'));
 
             return $this->redirectToRoute('movies_list');
         }
@@ -126,7 +128,7 @@ class MovieController extends AbstractController
     {
         $this->em->remove($movie);
         $this->em->flush();
-        $this->addFlash('notice', 'You have successfully deleted a movie');
+        $this->addFlash('notice', $this->translator->trans('alerts.deleted'));
 
         return $this->redirectToRoute('movies_list');
     }

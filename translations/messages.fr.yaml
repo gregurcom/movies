@@ -25,3 +25,7 @@ form:
         submit: Nous faire parvenir
         register: S'inscrire
         sign: S'identifier
+alerts:
+    created: Vous avez créé un film avec succès
+    updated: Vous avez mis à jour un film avec succès
+    deleted: Vous avez supprimé un film avec succès
