@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Positive;
 
-class MovieUpdateFormType extends AbstractType
+class MovieFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -32,10 +32,24 @@ class MovieUpdateFormType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'required' => true,
+                'constraints' => new Length(['min' => 2])
             ])
             ->add('image', FileType::class, [
                 'required' => false,
                 'mapped' => false,
+                'constraints' => new Image([
+                    'maxSize' => "10M",
+                    'minWidth' => 200,
+                    'maxWidth' => 5000,
+                    'minHeight' => 200,
+                    'maxHeight' => 5000,
+                    'mimeTypes' => [
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/gif",
+                    ],
+                ])
             ])
             ->add('submit', SubmitType::class)
         ;

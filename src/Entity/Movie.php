@@ -10,7 +10,6 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ApiResource(
@@ -28,20 +27,14 @@ class Movie
 
     #[ORM\Column(type: 'string', length: 150)]
     #[Groups(['movie:list', 'movie:item'])]
-    #[Assert\Length(min: 2, max: 150)]
-    #[Assert\NotBlank]
     private $title;
 
     #[ORM\Column(type: 'float', nullable: true)]
     #[Groups(['movie:list', 'movie:item'])]
-    #[Assert\PositiveOrZero]
     private $rating;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['movie:list', 'movie:item'])]
-    /**
-     * @Assert\Image(mimeTypes={"image/png", "image/jpeg", "image/jpg", "image/gif"})
-     */
     private $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
@@ -49,13 +42,10 @@ class Movie
 
     #[ORM\Column(type: 'text')]
     #[Groups(['movie:list', 'movie:item'])]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 2)]
     private $description;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank]
     private $category;
 
     #[ORM\OneToMany(mappedBy: 'movie', targetEntity: Comment::class)]
