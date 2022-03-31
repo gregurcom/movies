@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Movie;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,6 +33,14 @@ class MovieFormType extends AbstractType
             ->add('rating', IntegerType::class, [
                 'required' => false,
                 'constraints' => new Positive(),
+            ])
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.title', 'ASC');
+                },
+                'choice_label' => 'title',
             ])
             ->add('description', TextareaType::class, [
                 'required' => true,
