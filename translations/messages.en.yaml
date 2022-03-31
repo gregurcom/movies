@@ -12,6 +12,8 @@ titles:
     home: Home
     rating: Rating
     register: Register
+    description: Description
+    actors: Actors
 form:
     labels:
         title: Title

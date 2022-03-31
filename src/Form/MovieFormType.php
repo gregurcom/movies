@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\Actor;
 use App\Entity\Category;
 use App\Entity\Movie;
 use Doctrine\ORM\EntityRepository;
@@ -41,6 +42,11 @@ class MovieFormType extends AbstractType
                         ->orderBy('c.title', 'ASC');
                 },
                 'choice_label' => 'title',
+            ])
+            ->add('actors', EntityType::class, [
+                'class' => Actor::class,
+                'choice_label' => 'name',
+                'multiple' => true,
             ])
             ->add('description', TextareaType::class, [
                 'required' => true,

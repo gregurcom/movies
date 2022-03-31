@@ -12,6 +12,8 @@ titles:
     home: Domicile
     rating: Notation
     register: S'inscrire
+    description: La description
+    actors: Acteurs
 form:
     labels:
         title: Titre
