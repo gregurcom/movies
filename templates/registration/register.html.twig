@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% trans %}titles.register{% endtrans %}{% endblock %}
+{% block title %}{{ 'titles.register'|trans }}{% endblock %}
 
 {% block body %}
 <div class="container">
-    <h1>{% trans %}titles.register{% endtrans %}</h1>
+    <h1>{{ 'titles.register'|trans }}</h1>
 
     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.name) }}
@@ -14,7 +14,7 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn btn-outline-dark">{% trans %}form.buttons.register{% endtrans %}</button>
+        <button type="submit" class="btn btn-outline-dark">{{ 'form.buttons.register'|trans }}</button>
     {{ form_end(registrationForm) }}
 </div>
 {% endblock %}

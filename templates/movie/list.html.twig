@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container mt-2">
-    <h1 class="text-center mb-3">{% trans %}titles.movies{% endtrans %}</h1>
+    <h1 class="text-center mb-3">{{ 'titles.movies'|trans }}</h1>
     {% for message in app.flashes('notice') %}
         <div class="flash-notice alert alert-info">
             {{ message }}
@@ -13,8 +13,8 @@
     {% if app.user %}
         {% if app.user.isAdmin() %}
             <a href="{{ path("movies_create") }}" class="btn btn-outline-dark mb-2">
-                {% trans %}buttons.create{% endtrans %}
-                {% trans %}titles.movies{% endtrans %}
+                {{ 'buttons.create'|trans }}
+                {{ 'titles.movies'|trans }}
             </a>
         {% endif %}
     {% endif %}
@@ -24,7 +24,7 @@
             <div class="row mb-3 align-items-center">
                 <div class="col-6">
                     <a href="{{ path("movies_show", {id: movie.id}) }}" class="h3 text-decoration-none text-dark">{{ movie.title }}</a>
-                    <span class="text-muted">{% trans %}titles.rating{% endtrans %}: {{ movie.rating }}</span>
+                    <span class="text-muted">{{ 'titles.rating'|trans }}: {{ movie.rating }}</span>
                     <div>
                         {{ movie.description }}
                     </div>
@@ -42,14 +42,14 @@
             {% if previous >= 0 %}
                 <div class="text-center mt-5">
                     <a href="{{ path('movies_list', { offset: previous }) }}" class="btn btn-outline-dark">
-                        {% trans %}buttons.previous{% endtrans %}
+                        {{ 'buttons.previous'|trans }}
                     </a>
                 </div>
             {% endif %}
             {% if next < movies|length %}
                 <div class="text-center mt-5 px-2">
                     <a href="{{ path('movies_list', { offset: next }) }}" class="btn btn-outline-dark">
-                        {% trans %}buttons.next{% endtrans %}
+                        {{ 'buttons.next'|trans }}
                     </a>
                 </div>
             {% endif %}

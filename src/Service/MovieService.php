@@ -12,10 +12,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class MovieService
 {
-    public function __construct(
-        private SluggerInterface $slugger,
-        private string $projectDir
-    ) {}
+    public function __construct(private SluggerInterface $slugger, private string $projectDir) {}
 
     public function storeImage(Movie $movie, UploadedFile $imagePath)
     {
@@ -31,16 +28,5 @@ class MovieService
         }
 
         $movie->setImage($fileName);
-    }
-
-    public function getMovieFields(): array
-    {
-        return [
-            'title' => null,
-            'category' => null,
-            'rating' => null,
-            'description' => null,
-            'image' => null
-        ];
     }
 }

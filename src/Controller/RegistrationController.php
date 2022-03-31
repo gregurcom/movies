@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('{_locale}/register', name: 'app_register', requirements: ['_locale' => 'en|fr'])]
+    #[Route('{_locale<%app.supported_locales%>}/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EventDispatcherInterface $eventDispatcher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();

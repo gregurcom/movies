@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/{_locale}/movies', name: 'movies_', requirements: ['_locale' => 'en|fr'])]
+#[Route('/{_locale<%app.supported_locales%>}/movies', name: 'movies_')]
 class MovieController extends AbstractController
 {
     public function __construct(

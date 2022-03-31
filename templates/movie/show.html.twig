@@ -16,15 +16,15 @@
         {% if app.user %}
             {% if app.user.isAdmin() %}
                 <a href="{{ path("movies_update", {id: movie.id}) }}" class="h4 btn btn-outline-dark">
-                    {% trans %}buttons.update{% endtrans %}
+                    {{ 'buttons.update'|trans }}
                 </a>
                 <a href="{{ path("movies_delete", {id: movie.id}) }}" class="h4 btn btn-outline-danger">
-                    {% trans %}buttons.delete{% endtrans %}
+                    {{ 'buttons.delete'|trans }}
                 </a>
                 <br>
             {% endif %}
         {% endif %}
-        <span class="text-muted">{% trans %}titles.rating{% endtrans %}: {{ movie.rating }}</span>
+        <span class="text-muted">{{ 'titles.rating'|trans }}: {{ movie.rating }}</span>
     </div>
     <div class="mt-2">
         {{ movie.description }}

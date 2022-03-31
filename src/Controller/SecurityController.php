@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '{_locale}/login', name: 'app_login', requirements: ['_locale' => 'en|fr'])]
+    #[Route(path: '{_locale<%app.supported_locales%>}/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
