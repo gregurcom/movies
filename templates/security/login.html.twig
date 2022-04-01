@@ -9,7 +9,7 @@
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'titles.signIn'|trans }}</h1>
         <label for="inputEmail">{% trans %}form.labels.email{% endtrans %}</label>
         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
         <label for="inputPassword">{% trans %}form.labels.password{% endtrans %}</label>
@@ -30,7 +30,8 @@
             </div>
         #}
 
-        <button class="btn btn-lg btn-primary mt-2" type="submit">
+        <a href="{{ path('app_register') }}" class="d-block">{{ 'links.registerAccount'|trans }}</a>
+        <button class="btn btn-lg btn-primary mt-3" type="submit">
             {% trans %}form.buttons.sign{% endtrans %}
         </button>
     </form>

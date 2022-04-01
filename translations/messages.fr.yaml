@@ -1,3 +1,6 @@
+links:
+    registerAccount: Créer un compte
+    login: Connexion
 buttons:
     create: Créer
     update: Mettre à jour
@@ -14,6 +17,8 @@ titles:
     register: S'inscrire
     description: La description
     actors: Acteurs
+    signIn: Veuillez vous connecter
+    comments: Commentaires
 form:
     labels:
         title: Titre

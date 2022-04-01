@@ -40,6 +40,10 @@ class MovieController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, MovieService $movieService): Response
@@ -56,8 +60,7 @@ class MovieController extends AbstractController
                 $movieService->storeImage($movie, $imagePath);
             }
 
-            $this->em->persist($movie);
-            $this->em->flush();
+            $this->movieRepository->add($movie);
             $this->addFlash('notice', $this->translator->trans('alerts.movie.created'));
 
             return $this->redirectToRoute('movies_list');

@@ -3,7 +3,7 @@
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container py-4">
     <h1 class="text-center">{{ movie.title }}</h1>
     <div class="text-center">
         {% if movie.image %}
@@ -27,14 +27,32 @@
         <span class="text-muted">{{ 'titles.rating'|trans }}: {{ movie.rating }}</span>
     </div>
     <div class="mt-2">
-        <h5>{{ 'titles.actors'|trans }}:</h5>
+        <h5 class="d-inline">{{ 'titles.actors'|trans }}:</h5>
         {% for actor in movie.actors %}
-            <div>{{ actor.name }}</div>
+            <span>{{ actor.name }}</span>
         {% endfor %}
     </div>
     <div class="mt-2">
-        <h5>{{ 'titles.description'|trans }}:</h5>
+        <h5 class="d-inline">{{ 'titles.description'|trans }}:</h5>
         {{ movie.description }}
     </div>
+    {% if app.user %}
+        <div class="mt-2">
+            <h5>{{ 'titles.comments'|trans }} ({{ movie.comments|length }}):</h5>
+            <div class="px-3 py-2">
+                {% for comment in movie.comments %}
+                    <div class="mt-2"><span class="fw-bold">{{ comment.author.name }}</span>: {{ comment.text }}</div>
+                {% endfor %}
+            </div>
+            <form action="{{ path('comments_create', {movie: movie.id}) }}" method="POST" class="mt-4">
+                <textarea name="text" placeholder="Write a comment..." cols="40" rows="5" style="padding: 10px;"></textarea>
+                <button type="submit" class="btn btn-outline-dark d-block">{{ 'form.buttons.submit'|trans }}</button>
+            </form>
+        </div>
+    {% else %}
+        <div class="alert alert-info mt-2 text-center">
+            To write a comment, please <a href="{{ path('app_login') }}">{{ 'links.login'|trans }}</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

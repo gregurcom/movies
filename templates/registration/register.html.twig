@@ -14,7 +14,8 @@
         }) }}
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn btn-outline-dark">{{ 'form.buttons.register'|trans }}</button>
+        <a href="{{ path('app_login') }}" class="d-block">{{ 'links.login'|trans }}</a>
+        <button type="submit" class="btn btn-outline-dark mt-2">{{ 'form.buttons.register'|trans }}</button>
     {{ form_end(registrationForm) }}
 </div>
 {% endblock %}
