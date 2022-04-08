@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Movie;
 use App\Form\MovieFormType;
 use App\Repository\CategoryRepository;
+use App\Repository\CommentRepository;
 use App\Repository\MovieRepository;
 use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,6 +23,7 @@ class MovieController extends AbstractController
 {
     public function __construct(
         private MovieRepository $movieRepository,
+        private CommentRepository $commentRepository,
         private CategoryRepository $categoryRepository,
         private TranslatorInterface $translator,
         private EntityManagerInterface $em,
@@ -109,8 +111,16 @@ class MovieController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function show(Movie $movie): Response
+    public function show(Movie $movie, Request $request): Response
     {
-        return $this->render('movie/show.html.twig', ['movie' => $movie]);
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $this->commentRepository->getCommentPaginator($movie, $offset);
+
+        return $this->render('movie/show.html.twig', [
+            'movie' => $movie,
+            'comments' => $paginator,
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
+        ]);
     }
 }
