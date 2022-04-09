@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -13,8 +12,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/{_locale<%app.supported_locales%>}/{movie}/comments', name: 'comments_')]
-class CommentController extends AbstractController
+final class CommentController extends AbstractController
 {
     public function __construct(public CommentRepository $commentRepository) {}
 
@@ -23,7 +23,6 @@ class CommentController extends AbstractController
      * @throws \Doctrine\ORM\ORMException
      */
     #[Route('/create', name: 'create')]
-    #[IsGranted('ROLE_USER')]
     public function create(Movie $movie, Request $request): RedirectResponse
     {
         $comment = new Comment();

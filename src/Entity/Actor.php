@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -17,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     itemOperations: ['get' => ['normalization_context' => ['groups' => 'actor:item']]],
     paginationEnabled: false,
 )]
-class Actor
+final class Actor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

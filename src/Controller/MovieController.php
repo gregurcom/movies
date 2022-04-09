@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -19,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/{_locale<%app.supported_locales%>}/movies', name: 'movies_')]
-class MovieController extends AbstractController
+final class MovieController extends AbstractController
 {
     public function __construct(
         private MovieRepository $movieRepository,

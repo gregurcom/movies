@@ -1,12 +1,11 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Service;
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class ValidationService
+final class ValidationService
 {
     public function getErrorMessages(ConstraintViolationListInterface $errors, array $fields): array
     {

@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\EventSubscriber;
@@ -10,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
-class RegistrationNotificationSubscriber implements EventSubscriberInterface
+final class RegistrationNotificationSubscriber implements EventSubscriberInterface
 {
     public function __construct(private MailerInterface $mailer, private string $sender) {}
 

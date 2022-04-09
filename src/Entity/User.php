@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -21,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     itemOperations: ['get' => ['normalization_context' => ['groups' => 'user:item']]],
     paginationEnabled: false,
 )]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

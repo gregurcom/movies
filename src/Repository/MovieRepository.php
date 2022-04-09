@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Repository;
@@ -17,7 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Movie[]    findAll()
  * @method Movie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MovieRepository extends ServiceEntityRepository
+final class MovieRepository extends ServiceEntityRepository
 {
     public const PAGINATOR_PER_PAGE = 2;
 

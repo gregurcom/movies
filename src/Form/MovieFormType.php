@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Form;
@@ -22,7 +21,7 @@ use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Positive;
 
-class MovieFormType extends AbstractType
+final class MovieFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

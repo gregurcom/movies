@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -17,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
     itemOperations: ['get' => ['normalization_context' => ['groups' => 'movie:item']]],
     paginationEnabled: false,
 )]
-class Movie
+final class Movie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
