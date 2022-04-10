@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
     itemOperations: ['get' => ['normalization_context' => ['groups' => 'movie:item']]],
     paginationEnabled: false,
 )]
-final class Movie
+class Movie
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -18,10 +18,6 @@ final class CommentController extends AbstractController
 {
     public function __construct(public CommentRepository $commentRepository) {}
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route('/create', name: 'create')]
     public function create(Movie $movie, Request $request): RedirectResponse
     {

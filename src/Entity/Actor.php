@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     itemOperations: ['get' => ['normalization_context' => ['groups' => 'actor:item']]],
     paginationEnabled: false,
 )]
-final class Actor
+class Actor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

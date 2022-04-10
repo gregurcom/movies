@@ -41,12 +41,8 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function create(Request $request, MovieService $movieService): Response
     {
         $categories = $this->categoryRepository->findAll();
@@ -73,8 +69,8 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id<\d+>}/update', name: 'update', methods: ['GET', 'POST'])]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
         $form = $this->createForm(MovieFormType::class, $movie);
@@ -98,8 +94,8 @@ final class MovieController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['GET', 'DELETE'])]
     #[IsGranted('ROLE_ADMIN')]
+    #[Route('/{id<\d+>}/delete', name: 'delete', methods: ['DELETE'])]
     public function delete(Movie $movie): Response
     {
         $this->em->remove($movie);
@@ -109,7 +105,7 @@ final class MovieController extends AbstractController
         return $this->redirectToRoute('movies_list');
     }
 
-    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/{id<\d+>}', name: 'show', methods: ['GET'])]
     public function show(Movie $movie, Request $request): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
