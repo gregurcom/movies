@@ -1,6 +1,6 @@
-#Symfony movie app
+# Symfony movie app
 
-##Installation & SetUp
+## Installation & SetUp
 
 ------------
 ___Clone the project___
@@ -12,9 +12,16 @@ ___Install project's dependencies___
 composer install
 ```
 
-##Running application (local)
+## Running application (local)
 
 ------------
 ```
 symfony server:start
+```
+
+## Tests
+
+------------
+```
+./bin/phpunit
 ```
