@@ -29,11 +29,13 @@ final class MovieFormType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'constraints' => [new Length(['min' => 3, 'max' => 150])]
+                'constraints' => [new Length(['min' => 3, 'max' => 150])],
+                'label' => 'form.labels.title',
             ])
             ->add('rating', IntegerType::class, [
                 'required' => false,
                 'constraints' => new Positive(),
+                'label' => 'form.labels.rating',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
@@ -42,15 +44,18 @@ final class MovieFormType extends AbstractType
                         ->orderBy('c.title', 'ASC');
                 },
                 'choice_label' => 'title',
+                'label' => 'form.labels.category',
             ])
             ->add('actors', EntityType::class, [
                 'class' => Actor::class,
                 'choice_label' => 'name',
                 'multiple' => true,
+                'label' => 'form.labels.actors',
             ])
             ->add('description', TextareaType::class, [
                 'required' => true,
-                'constraints' => new Length(['min' => 2])
+                'constraints' => new Length(['min' => 2]),
+                'label' => 'form.labels.description',
             ])
             ->add('image', FileType::class, [
                 'required' => false,
@@ -67,9 +72,12 @@ final class MovieFormType extends AbstractType
                         "image/png",
                         "image/gif",
                     ],
-                ])
+                ]),
+                'label' => 'form.labels.image',
             ])
-            ->add('submit', SubmitType::class)
+            ->add('submit', SubmitType::class, [
+                'label' => 'form.buttons.submit',
+            ])
         ;
     }
 

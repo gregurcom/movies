@@ -28,6 +28,9 @@ form:
         image: Image
         password: Mot de passe
         email: Email
+        actors: Actrices
+        name: Nom
+        agreeTerms: Accepter les conditions
     buttons:
         submit: Nous faire parvenir
         register: S'inscrire

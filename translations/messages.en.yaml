@@ -28,6 +28,9 @@ form:
         image: Image
         password: Password
         email: Email
+        actors: Actors
+        name: Name
+        agreeTerms: Agree Terms
     buttons:
         submit: Submit
         register: Register

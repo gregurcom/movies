@@ -41,7 +41,7 @@ final class RegistrationController extends AbstractController
 
             $this->userRepository->add($user);
 
-            $eventDispatcher->dispatch(new RegistrationEvent($user));
+//            $eventDispatcher->dispatch(new RegistrationEvent($user));
 
             return $this->redirectToRoute('movies_list');
         }
