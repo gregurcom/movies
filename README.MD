@@ -1,8 +1,6 @@
 # Symfony movie app
 
 ## Installation & SetUp
-
-------------
 ___Clone the project___
 ```
 git clone https://github.com/gregurcom/movies.git
@@ -13,15 +11,11 @@ composer install
 ```
 
 ## Running application (local)
-
-------------
 ```
 symfony server:start
 ```
 
 ## Tests
-
-------------
 ```
 ./bin/phpunit
 ```
