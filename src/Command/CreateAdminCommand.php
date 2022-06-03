@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Command;
@@ -21,7 +22,7 @@ final class CreateAdminCommand extends Command
 {
     public function __construct(
         private UserRepository $userRepository,
-        private UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
     ) {
         parent::__construct();
     }
@@ -36,10 +37,6 @@ final class CreateAdminCommand extends Command
         ;
     }
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

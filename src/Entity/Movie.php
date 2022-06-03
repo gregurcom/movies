@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\MovieRepository;
@@ -22,34 +24,35 @@ class Movie
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups(['movie:list', 'movie:item'])]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 150)]
     #[Groups(['movie:list', 'movie:item'])]
-    private $title;
+    private string $title;
 
     #[ORM\Column(type: 'float', nullable: true)]
     #[Groups(['movie:list', 'movie:item'])]
-    private $rating;
+    private ?float $rating;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Groups(['movie:list', 'movie:item'])]
-    private $image;
+    private ?string $image;
 
     #[ORM\ManyToMany(targetEntity: Actor::class, inversedBy: 'movies')]
     private $actors;
 
     #[ORM\Column(type: 'text')]
     #[Groups(['movie:list', 'movie:item'])]
-    private $description;
+    private string $description;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
-    private $category;
+    private ?Category $category;
 
     #[ORM\OneToMany(mappedBy: 'movie', targetEntity: Comment::class)]
     private $comments;
 
+    #[Pure]
     public function __construct()
     {
         $this->actors = new ArrayCollection();

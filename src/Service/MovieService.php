@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Service;
@@ -20,8 +21,7 @@ final class MovieService
         $fileName = $safeFilename . '-'. uniqid() . '.' . $imagePath->guessExtension();
 
         try {
-            $imagePath
-                ->move($this->projectDir, $fileName);
+            $imagePath->move($this->projectDir, $fileName);
         } catch (FileException $e) {
             new Response($e->getMessage());
         }

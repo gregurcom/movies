@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -12,10 +14,10 @@ class Comment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'text')]
-    private $text;
+    private string $text;
 
     #[ORM\ManyToOne(targetEntity: Movie::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
@@ -59,7 +61,7 @@ class Comment
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    public function setAuthor(User|UserInterface|null $author): self
     {
         $this->author = $author;
 

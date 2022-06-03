@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
@@ -8,6 +9,7 @@ use App\Repository\ActorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
@@ -22,16 +24,17 @@ class Actor
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     #[Groups(['actor:list', 'actor:item'])]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['actor:list', 'actor:item'])]
-    private $name;
+    private string $name;
 
     #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'actors')]
     #[Groups(['actor:list', 'actor:item'])]
     private $movies;
 
+    #[Pure]
     public function __construct()
     {
         $this->movies = new ArrayCollection();

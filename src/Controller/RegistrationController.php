@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -19,13 +20,9 @@ final class RegistrationController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepository,
-        private UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
     ) {}
 
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     */
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
