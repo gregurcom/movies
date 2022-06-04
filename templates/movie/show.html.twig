@@ -44,20 +44,24 @@
                     <div class="mt-2 mb-2"><span class="fw-bold">{{ comment.author.name }}</span>: {{ comment.text }}</div>
                 {% endfor %}
                 {% if previous >= 0 %}
-                    <a href="{{ path('movies_show', { id: movie.id, offset: previous }) }}" class="btn btn-outline-dark">Previous</a>
+                    <a href="{{ path('movies_show', { id: movie.id, offset: previous }) }}" class="btn btn-outline-dark">
+                        {{ 'buttons.previous'|trans }}
+                    </a>
                 {% endif %}
                 {% if next < comments|length %}
-                    <a href="{{ path('movies_show', { id: movie.id, offset: next }) }}" class="btn btn-outline-dark">Next</a>
+                    <a href="{{ path('movies_show', { id: movie.id, offset: next }) }}" class="btn btn-outline-dark">
+                        {{ 'buttons.next'|trans }}
+                    </a>
                 {% endif %}
             </div>
             <form action="{{ path('comments_create', {movie: movie.id}) }}" method="POST" class="mt-4">
-                <textarea name="text" placeholder="Write a comment..." cols="40" rows="5" style="padding: 10px;"></textarea>
+                <textarea name="text" placeholder="{{ 'form.placeholders.comments.write'|trans }}" cols="40" rows="5"></textarea>
                 <button type="submit" class="btn btn-outline-dark d-block">{{ 'form.buttons.submit'|trans }}</button>
             </form>
         </div>
     {% else %}
         <div class="alert alert-info mt-2 text-center">
-            To write a comment, please <a href="{{ path('app_login') }}">{{ 'links.login'|trans }}</a>
+            {{ 'alerts.comment.writeAccess'|trans }} <a href="{{ path('app_login') }}">{{ 'links.login'|trans }}</a>
         </div>
     {% endif %}
 </div>

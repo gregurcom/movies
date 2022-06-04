@@ -5,3 +5,11 @@ body {
 .selected {
     border-bottom: 3px solid black;
 }
+
+.example-wrapper {
+    margin: 50px;
+}
+
+form textarea {
+    padding: 10px;
+}

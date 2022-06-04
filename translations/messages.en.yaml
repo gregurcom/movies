@@ -15,10 +15,12 @@ titles:
     home: Home
     rating: Rating
     register: Register
+    login: Login
     description: Description
     actors: Actors
     signIn: Please sign in
     comments: Comments
+    welcome: Welcome
 form:
     labels:
         title: Title
@@ -35,8 +37,14 @@ form:
         submit: Submit
         register: Register
         sign: Sign in
+    placeholders:
+        comments:
+            write: Write a comment
 alerts:
     movie:
         created: You have successfully created a movie
         updated: You have successfully updated a movie
         deleted: You have successfully deleted a movie
+    comment:
+        writeAccess:
+            To write a comment, please

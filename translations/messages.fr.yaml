@@ -15,10 +15,12 @@ titles:
     home: Domicile
     rating: Notation
     register: S'inscrire
+    login: Connexion
     description: La description
     actors: Acteurs
     signIn: Veuillez vous connecter
     comments: Commentaires
+    welcome: Bienvenue
 form:
     labels:
         title: Titre
@@ -35,8 +37,14 @@ form:
         submit: Nous faire parvenir
         register: S'inscrire
         sign: S'identifier
+    placeholders:
+        comments:
+            write: Écrire un commentaire
 alerts:
     movie:
         created: Vous avez créé un film avec succès
         updated: Vous avez mis à jour un film avec succès
         deleted: Vous avez supprimé un film avec succès
+    comment:
+        writeAccess:
+            Pour écrire un commentaire, veuillez

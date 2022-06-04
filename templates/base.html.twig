@@ -2,7 +2,7 @@
 <html lang="{{ app.request.locale }}">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{{ 'titles.welcome'|trans }}!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
@@ -47,9 +47,13 @@
                 {% endif %}
             </ul>
             <div class="d-flex align-items-center">
-                <a href="{{ path('movies_list', {_locale: 'en'}) }}"><span class="fi-gb fi {{ app.request.locale == 'en' ? 'selected' : '' }}"></span></a>
+                <a href="{{ path('movies_list', {_locale: 'en'}) }}">
+                    <span class="fi-gb fi {{ app.request.locale == 'en' ? 'selected' : '' }}"></span>
+                </a>
                 <div class="px-1"></div>
-                <a href="{{ path('movies_list', {_locale: 'fr'}) }}"><span class="fi-fr fi {{ app.request.locale == 'fr' ? 'selected' : '' }}"></span></a>
+                <a href="{{ path('movies_list', {_locale: 'fr'}) }}">
+                    <span class="fi-fr fi {{ app.request.locale == 'fr' ? 'selected' : '' }}"></span>
+                </a>
             </div>
         </header>
     </div>
