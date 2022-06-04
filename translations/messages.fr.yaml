@@ -46,5 +46,6 @@ alerts:
         updated: Vous avez mis à jour un film avec succès
         deleted: Vous avez supprimé un film avec succès
     comment:
+        deleted: Vous avez supprimé un commentaire avec succès
         writeAccess:
             Pour écrire un commentaire, veuillez

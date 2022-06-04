@@ -15,10 +15,10 @@
     <div class="mt-4">
         {% if app.user %}
             {% if app.user.isAdmin() %}
-                <a href="{{ path("movies_update", {id: movie.id}) }}" class="h4 btn btn-outline-dark">
+                <a href="{{ path("movies_update", {movie: movie.id}) }}" class="h4 btn btn-outline-dark">
                     {{ 'buttons.update'|trans }}
                 </a>
-                <a href="{{ path("movies_delete", {id: movie.id}) }}" class="h4 btn btn-outline-danger">
+                <a href="{{ path("movies_delete", {movie: movie.id}) }}" class="h4 btn btn-outline-danger">
                     {{ 'buttons.delete'|trans }}
                 </a>
                 <br>
@@ -39,17 +39,26 @@
     {% if app.user %}
         <div class="mt-2">
             <h5>{{ 'titles.comments'|trans }} ({{ movie.comments|length }}):</h5>
+            {% for message in app.flashes('notice') %}
+                <div class="flash-notice alert alert-info">
+                    {{ message }}
+                </div>
+            {% endfor %}
             <div class="px-3 py-2">
                 {% for comment in comments %}
                     <div class="mt-2 mb-2"><span class="fw-bold">{{ comment.author.name }}</span>: {{ comment.text }}</div>
+                    <form action="{{ path("comments_delete", { movie: movie.id, comment: comment.id }) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="h4 btn btn-outline-danger">{{ 'buttons.delete'|trans }}</button>
+                    </form>
                 {% endfor %}
                 {% if previous >= 0 %}
-                    <a href="{{ path('movies_show', { id: movie.id, offset: previous }) }}" class="btn btn-outline-dark">
+                    <a href="{{ path('movies_show', { movie: movie.id, offset: previous }) }}" class="btn btn-outline-dark">
                         {{ 'buttons.previous'|trans }}
                     </a>
                 {% endif %}
                 {% if next < comments|length %}
-                    <a href="{{ path('movies_show', { id: movie.id, offset: next }) }}" class="btn btn-outline-dark">
+                    <a href="{{ path('movies_show', { movie: movie.id, offset: next }) }}" class="btn btn-outline-dark">
                         {{ 'buttons.next'|trans }}
                     </a>
                 {% endif %}

@@ -42,6 +42,20 @@ final class MovieController extends AbstractController
         ]);
     }
 
+    #[Route('/{movie<\d+>}', name: 'show', methods: ['GET'])]
+    public function show(Movie $movie, Request $request): Response
+    {
+        $offset = max(0, $request->query->getInt('offset', 0));
+        $paginator = $this->commentRepository->getCommentPaginator($movie, $offset);
+
+        return $this->render('movie/show.html.twig', [
+            'movie' => $movie,
+            'comments' => $paginator,
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
+        ]);
+    }
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
     public function create(Request $request, MovieService $movieService): Response
@@ -71,7 +85,7 @@ final class MovieController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id<\d+>}/update', name: 'update', methods: ['GET', 'POST'])]
+    #[Route('/{movie<\d+>}/update', name: 'update', methods: ['GET', 'POST'])]
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
         $form = $this->createForm(MovieFormType::class, $movie);
@@ -96,7 +110,7 @@ final class MovieController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id<\d+>}/delete', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{movie<\d+>}/delete', name: 'delete', methods: ['DELETE'])]
     public function delete(Movie $movie): Response
     {
         $this->em->remove($movie);
@@ -104,19 +118,5 @@ final class MovieController extends AbstractController
         $this->addFlash('notice', $this->translator->trans('alerts.movie.deleted'));
 
         return $this->redirectToRoute('movies_list');
-    }
-
-    #[Route('/{id<\d+>}', name: 'show', methods: ['GET'])]
-    public function show(Movie $movie, Request $request): Response
-    {
-        $offset = max(0, $request->query->getInt('offset', 0));
-        $paginator = $this->commentRepository->getCommentPaginator($movie, $offset);
-
-        return $this->render('movie/show.html.twig', [
-            'movie' => $movie,
-            'comments' => $paginator,
-            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
-            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
-        ]);
     }
 }
