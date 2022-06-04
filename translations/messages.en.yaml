@@ -47,5 +47,6 @@ alerts:
         deleted: You have successfully deleted a movie
     comment:
         deleted: You have successfully deleted a comment
+        updated: You have successfully updated a comment
         writeAccess:
             To write a comment, please

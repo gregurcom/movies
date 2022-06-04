@@ -47,26 +47,27 @@
             <div class="px-3 py-2">
                 {% for comment in comments %}
                     <div class="mt-2 mb-2"><span class="fw-bold">{{ comment.author.name }}</span>: {{ comment.text }}</div>
-                    <form action="{{ path("comments_delete", { movie: movie.id, comment: comment.id }) }}" method="post">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button class="h4 btn btn-outline-danger">{{ 'buttons.delete'|trans }}</button>
-                    </form>
+                    {% if is_granted('COMMENT_DELETE', comment) %}
+                        <form action="{{ path("comments_delete", { movie: movie.id, comment: comment.id }) }}" method="POST">
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-comment') }}"/>
+                            <button class="btn btn-outline-danger mb-3">{{ 'buttons.delete'|trans }}</button>
+                        </form>
+                    {% endif %}
                 {% endfor %}
-                {% if previous >= 0 %}
-                    <a href="{{ path('movies_show', { movie: movie.id, offset: previous }) }}" class="btn btn-outline-dark">
-                        {{ 'buttons.previous'|trans }}
-                    </a>
-                {% endif %}
-                {% if next < comments|length %}
-                    <a href="{{ path('movies_show', { movie: movie.id, offset: next }) }}" class="btn btn-outline-dark">
-                        {{ 'buttons.next'|trans }}
-                    </a>
-                {% endif %}
+                <div class="d-block">
+                    {% if previous >= 0 %}
+                        <a href="{{ path('movies_show', { movie: movie.id, offset: previous }) }}" class="btn btn-outline-dark">
+                            {{ 'buttons.previous'|trans }}
+                        </a>
+                    {% endif %}
+                    {% if next < comments|length %}
+                        <a href="{{ path('movies_show', { movie: movie.id, offset: next }) }}" class="btn btn-outline-dark">
+                            {{ 'buttons.next'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
             </div>
-            <form action="{{ path('comments_create', {movie: movie.id}) }}" method="POST" class="mt-4">
-                <textarea name="text" placeholder="{{ 'form.placeholders.comments.write'|trans }}" cols="40" rows="5"></textarea>
-                <button type="submit" class="btn btn-outline-dark d-block">{{ 'form.buttons.submit'|trans }}</button>
-            </form>
+            {{ form(form) }}
         </div>
     {% else %}
         <div class="alert alert-info mt-2 text-center">

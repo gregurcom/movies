@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Movie;
+use App\Form\CommentFormType;
 use App\Form\MovieFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\CommentRepository;
@@ -45,14 +47,21 @@ final class MovieController extends AbstractController
     #[Route('/{movie<\d+>}', name: 'show', methods: ['GET'])]
     public function show(Movie $movie, Request $request): Response
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentFormType::class, $comment, [
+            'action' => $this->generateUrl('comments_create', ['movie' => $movie->getId()]),
+            'method' => 'POST',
+        ]);
+
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $this->commentRepository->getCommentPaginator($movie, $offset);
 
-        return $this->render('movie/show.html.twig', [
+        return $this->renderForm('movie/show.html.twig', [
             'movie' => $movie,
             'comments' => $paginator,
             'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
+            'form' => $form,
         ]);
     }
 
@@ -89,10 +98,11 @@ final class MovieController extends AbstractController
     public function update(Movie $movie, Request $request, MovieService $movieService): Response
     {
         $form = $this->createForm(MovieFormType::class, $movie);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $imagePath = $form->get('image')->getData();
+
             if ($imagePath) {
                 $movieService->storeImage($movie, $imagePath);
             }
