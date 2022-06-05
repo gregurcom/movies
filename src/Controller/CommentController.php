@@ -9,6 +9,7 @@ use App\Entity\Movie;
 use App\Form\CommentFormType;
 use App\Repository\CommentRepository;
 use App\Service\CommentService;
+use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -35,6 +36,7 @@ final class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setAuthor($this->getUser());
             $comment->setMovie($movie);
+            $comment->setCreatedAt(new DateTimeImmutable('now'));
 
             $this->commentRepository->add($comment);
         }

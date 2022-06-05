@@ -46,7 +46,12 @@
             {% endfor %}
             <div class="px-3 py-2">
                 {% for comment in comments %}
-                    <div class="mt-2 mb-2"><span class="fw-bold">{{ comment.author.name }}</span>: {{ comment.text }}</div>
+                    <div class="mt-2 mb-2"><span class="fw-bold">{{ comment.author.name }}</span>:
+                        {{ comment.text }}
+                        {% if comment.createdAt %}
+                            <span class="text-secondary">{{ comment.createdAt|format_datetime }}</span>
+                        {% endif %}
+                    </div>
                     {% if is_granted('COMMENT_DELETE', comment) %}
                         <form action="{{ path("comments_delete", { movie: movie.id, comment: comment.id }) }}" method="POST">
                             <input type="hidden" name="token" value="{{ csrf_token('delete-comment') }}"/>
