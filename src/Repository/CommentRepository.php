@@ -11,6 +11,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -61,6 +62,21 @@ final class CommentRepository extends ServiceEntityRepository
             ->getQuery();
 
         return new Paginator($query);
+    }
+
+    public function getCommentsCount(UserInterface $author, Movie $movie): int
+    {
+        $date = new \DateTime();
+        $date->modify('-10 minutes');
+
+        return count($this->createQueryBuilder('c')
+            ->andWhere('c.author = :author')
+            ->andWhere('c.movie = :movie')
+            ->andWhere('c.created_at > :date')
+            ->setParameters(['author' => $author, 'movie' => $movie, 'date' => $date])
+            ->getQuery()
+            ->getResult()
+        );
     }
 
     // /**

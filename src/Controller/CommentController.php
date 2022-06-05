@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('ROLE_USER')]
 #[Route('/{_locale<%app.supported_locales%>}/{movie}/comments', name: 'comments_')]
@@ -23,11 +24,20 @@ final class CommentController extends AbstractController
     public function __construct(
         private CommentRepository $commentRepository,
         private CommentService $commentService,
+        private TranslatorInterface $translator,
     ) {}
 
     #[Route('/create', name: 'create', methods: ['POST'])]
     public function create(Movie $movie, Request $request): RedirectResponse
     {
+        $commentsCount = $this->commentRepository->getCommentsCount($this->getUser(), $movie);
+
+        if ($commentsCount >= Comment::MAX_AMOUNT) {
+            $this->addFlash('notice', $this->translator->trans('alerts.comment.timeout'));
+
+            return $this->redirectToRoute('movies_show', ['movie' => $movie->getId()]);
+        }
+
         $comment = new Comment();
 
         $form = $this->createForm(CommentFormType::class, $comment);

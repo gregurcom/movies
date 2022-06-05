@@ -48,5 +48,5 @@ alerts:
     comment:
         deleted: You have successfully deleted a comment
         updated: You have successfully updated a comment
-        writeAccess:
-            To write a comment, please
+        writeAccess: To write a comment, please
+        timeout: You have exceeded the limit for sending comments (3 comments every 10 minutes)

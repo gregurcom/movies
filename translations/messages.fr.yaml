@@ -48,5 +48,5 @@ alerts:
     comment:
         deleted: Vous avez supprimé un commentaire avec succès
         updated: Vous avez mis à jour un commentaire avec succès
-        writeAccess:
-            Pour écrire un commentaire, veuillez
+        writeAccess: Pour écrire un commentaire, veuillez
+        timeout: Vous avez dépassé la limite d'envoi de commentaires (3 commentaires toutes les 10 minutes)
