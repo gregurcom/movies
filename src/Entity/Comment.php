@@ -12,6 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
+    public const MAX_AMOUNT = 3;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
